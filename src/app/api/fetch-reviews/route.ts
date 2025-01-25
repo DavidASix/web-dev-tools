@@ -2,11 +2,21 @@ import { NextResponse } from "next/server";
 import { db } from "@/schema/db";
 import { reviews, businesses } from "@/schema/crud";
 import { eq, desc } from "drizzle-orm";
+import { z } from "zod";
 
+const bodySchema = z.object({
+  business_id: z.number(),
+});
+
+/**
+ * Fetch the reviews for a given business
+ * @param { business_id: number } - The database ID of the business to fetch reviews for
+ * @returns { reviews: Review[] } - The reviews for the given business
+ */
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { business_id } = businesses.select.parse(body);
+    const { business_id } = bodySchema.parse(body);
 
     if (!business_id) {
       return NextResponse.json(
