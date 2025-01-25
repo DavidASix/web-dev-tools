@@ -1,6 +1,11 @@
 import axios from "axios";
 import { z } from "zod";
 
+/**
+ * GoogleReviews class for fetching and parsing Google reviews and business details.
+ *
+ * @param { string } businessId - The Google business ID to fetch reviews for.
+ */
 export default class GoogleReviews {
   public businessId: string;
   private base = "https://local-business-data.p.rapidapi.com";
