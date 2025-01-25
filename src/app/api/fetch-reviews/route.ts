@@ -5,12 +5,16 @@ import { eq, desc } from "drizzle-orm";
 
 export async function POST(req: Request) {
   try {
-    const { place_id } = businesses.select.parse(req.body);
-    const business = db
-      .select({ id: businesses.table.id })
-      .from(businesses.table)
-      .where(eq(businesses.table.place_id, place_id ?? ""))
-      .as("business");
+    const body = await req.json();
+    const { business_id } = businesses.select.parse(body);
+
+    if (!business_id) {
+      return NextResponse.json(
+        { error: "Business ID is required" },
+        { status: 400 }
+      );
+    }
+
     const businessReviews = await db
       .select({
         author_name: reviews.table.author_name,
@@ -21,10 +25,10 @@ export async function POST(req: Request) {
         comments: reviews.table.comments,
       })
       .from(reviews.table)
-      .innerJoin(business, eq(reviews.table.business_id, business.id))
+      .where(eq(reviews.table.business_id, business_id))
       .orderBy(desc(reviews.table.datetime))
       .limit(30);
-    console.log(businessReviews);
+
     return NextResponse.json(businessReviews);
   } catch (error) {
     console.log(error);
