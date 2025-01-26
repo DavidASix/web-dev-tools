@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { apiKeys } from "@/schema/crud";
 import { auth } from "~/auth";
 import { db } from "@/schema/db";
-import { eq } from "drizzle-orm";
-import { generateApiKey } from "../../utils";
+import { and, eq, desc } from "drizzle-orm";
 
 export const GET = auth(async (req) => {
   try {
@@ -13,14 +12,14 @@ export const GET = auth(async (req) => {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    await db
-      .update(apiKeys.table)
-      .set({ expired: true })
-      .where(eq(apiKeys.table.user_id, user_id));
+    const apiKey = await db 
+      .select()
+      .from(apiKeys.table)
+      .where(and(eq(apiKeys.table.user_id, user_id), eq(apiKeys.table.expired, false)))
+      .orderBy(desc(apiKeys.table.created_at))
+      .then((rows) => rows[0]);
 
-    const key = await generateApiKey(user_id);
-
-    return NextResponse.json({ key }, { status: 200 });
+    return NextResponse.json({ apiKey }, { status: 200 });
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(
