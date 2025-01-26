@@ -3,7 +3,6 @@ import {
   serial,
   text,
   varchar,
-  numeric,
   integer,
   timestamp,
   real,
@@ -12,8 +11,6 @@ import {
 export const businesses = pgTable("businesses", {
   id: serial("id").primaryKey(),
   business_name: text("business_name"),
-  review_count: integer("review_count"),
-  review_score: real("review_score"),
   place_id: varchar("place_id", { length: 256 }),
 });
 
@@ -29,5 +26,15 @@ export const reviews = pgTable("reviews", {
   link: text("link"),
   rating: integer("rating"),
   comments: text("comments"),
+  created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const business_stats = pgTable("business_stats", {
+  id: serial("id").primaryKey(),
+  business_id: integer("business_id")
+    .references(() => businesses.id, { onDelete: "cascade" })
+    .notNull(),
+  review_count: integer("review_count"),
+  review_score: real("review_score"),
   created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
 });

@@ -8,6 +8,13 @@
       "when": 1734016081697,
       "tag": "0000_curvy_xorn",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1737849780559,
+      "tag": "0001_foamy_tattoo",
+      "breakpoints": true
     }
   ]
 }
