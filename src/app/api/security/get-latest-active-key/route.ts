@@ -19,7 +19,7 @@ export const GET = auth(async (req) => {
       .orderBy(desc(apiKeys.table.created_at))
       .then((rows) => rows[0]);
 
-    return NextResponse.json({ apiKey }, { status: 200 });
+    return NextResponse.json({ apiKey: apiKey.key }, { status: 200 });
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(
