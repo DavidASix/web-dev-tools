@@ -25,7 +25,7 @@ export const GET = auth(async (req) => {
     console.error("Error processing request:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 });

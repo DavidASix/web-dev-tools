@@ -122,7 +122,7 @@ const BusinessSchema = z.object({
         type: z.string().nullable(),
         photo_datetime_utc: z.string().nullable(),
         photo_timestamp: z.number().nullable(),
-      })
+      }),
     )
     .nullable(),
   global_plus_code: z.string(),

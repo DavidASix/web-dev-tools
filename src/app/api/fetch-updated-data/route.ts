@@ -21,14 +21,14 @@ export async function POST(req: NextRequest) {
   try {
     const { isValid, error } = await checkApiKey(req);
     if (!isValid) return error;
-    
+
     const body = await req.json();
     const { business_id } = bodySchema.parse(body);
 
     if (!business_id) {
       return NextResponse.json(
         { error: "Business ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     console.error("Error processing request:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

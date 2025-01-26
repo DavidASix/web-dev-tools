@@ -28,8 +28,8 @@ export async function updateReviews(business_id: number) {
     .where(
       inArray(
         reviews.table.lookup_id,
-        recentReviews.map((r) => r.review_id)
-      )
+        recentReviews.map((r) => r.review_id),
+      ),
     );
 
   // Format table and remove any existing reviews from the insertable rows1
@@ -44,10 +44,11 @@ export async function updateReviews(business_id: number) {
         link: review.review_link,
         rating: review.rating,
         comments: review.review_text,
-      })
+      }),
     )
     .filter(
-      (review) => !existingReviews.some((r) => r.lookup_id === review.lookup_id)
+      (review) =>
+        !existingReviews.some((r) => r.lookup_id === review.lookup_id),
     );
 
   console.log(`Inserting ${insertableReviews.length} new reviews`);

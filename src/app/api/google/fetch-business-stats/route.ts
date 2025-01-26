@@ -22,7 +22,7 @@ export const POST = auth(async (req) => {
     if (!business_id) {
       return NextResponse.json(
         { error: "Business ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -32,7 +32,7 @@ export const POST = auth(async (req) => {
     console.log(error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 });

@@ -21,8 +21,8 @@ export async function getLastEvent(event: DBEvent, business_id: number) {
     .where(
       and(
         eq(events.table.business_id, business_id),
-        eq(events.table.event, event)
-      )
+        eq(events.table.event, event),
+      ),
     )
     .orderBy(desc(events.table.timestamp))
     .limit(1)
@@ -65,7 +65,7 @@ export async function apiKeyIsValid(key: string) {
     .select()
     .from(apiKeys.table)
     .where(
-      and(eq(apiKeys.table.key, hashedKey), eq(apiKeys.table.expired, false))
+      and(eq(apiKeys.table.key, hashedKey), eq(apiKeys.table.expired, false)),
     )
     .then((rows) => rows[0]);
   return apiKey !== undefined;
@@ -88,10 +88,9 @@ export async function checkApiKey(request: NextRequest): Promise<{
   const isValid = key ? await apiKeyIsValid(key) : false;
   const response = {
     isValid: isValid,
-    error: isValid ? null : NextResponse.json(
-      { error: "Invalid API key" },
-      { status: 401 }
-    ),
+    error: isValid
+      ? null
+      : NextResponse.json({ error: "Invalid API key" }, { status: 401 }),
   };
   return response;
 }

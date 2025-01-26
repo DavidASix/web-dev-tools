@@ -54,8 +54,8 @@ export default function Dashboard() {
   const apiKeyText = loadingKey
     ? "Fetching..."
     : apiKey
-    ? `${apiKey.slice(0, 8)}************************`
-    : "Generate a key below";
+      ? `${apiKey.slice(0, 8)}************************`
+      : "Generate a key below";
 
   return (
     <ProductLayout>

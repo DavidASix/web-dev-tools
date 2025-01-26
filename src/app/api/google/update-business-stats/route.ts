@@ -22,7 +22,7 @@ export const POST = auth(async (req) => {
     if (!business_id) {
       return NextResponse.json(
         { error: "Business ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const insertedStats = await updateBusinessStats(business_id);
@@ -31,7 +31,7 @@ export const POST = auth(async (req) => {
     console.error("Error processing request:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
-})
+});
