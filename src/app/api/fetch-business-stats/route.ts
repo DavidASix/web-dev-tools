@@ -4,6 +4,7 @@ import { eq, desc } from "drizzle-orm";
 
 import { db } from "@/schema/db";
 import { businessStats } from "@/schema/crud";
+import { recordEvent } from "../utils";
 
 const bodySchema = z.object({
   business_id: z.number(),
@@ -37,6 +38,7 @@ export async function POST(req: Request) {
       .limit(1)
       .then((rows) => rows[0]);
 
+    await recordEvent("fetch_stats", business_id);
     return NextResponse.json(latestStats);
   } catch (error) {
     console.log(error);

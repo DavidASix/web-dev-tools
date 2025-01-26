@@ -3,6 +3,7 @@ import { db } from "@/schema/db";
 import { reviews, businesses } from "@/schema/crud";
 import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
+import { recordEvent } from "../utils";
 
 const bodySchema = z.object({
   business_id: z.number(),
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
       .orderBy(desc(reviews.table.datetime))
       .limit(30);
 
+    await recordEvent("fetch_reviews", business_id);
     return NextResponse.json(businessReviews);
   } catch (error) {
     console.log(error);

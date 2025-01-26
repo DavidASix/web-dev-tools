@@ -4,6 +4,7 @@ import { db } from "@/schema/db";
 import { eq, inArray, notInArray } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { recordEvent } from "../utils";
 
 const bodySchema = z.object({
   business_id: z.number(),
@@ -68,6 +69,7 @@ export async function POST(request: NextRequest) {
     console.log(`Inserting ${insertableReviews.length} new reviews`);
     await db.insert(reviews.table).values(insertableReviews);
 
+    await recordEvent("update_reviews", business_id);
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error processing request:", error);
