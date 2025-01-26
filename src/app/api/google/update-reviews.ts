@@ -51,7 +51,9 @@ export async function updateReviews(business_id: number) {
     );
 
   console.log(`Inserting ${insertableReviews.length} new reviews`);
-  await db.insert(reviews.table).values(insertableReviews);
+  if (insertableReviews.length > 0) {
+    await db.insert(reviews.table).values(insertableReviews);
+  }
 
   await recordEvent("update_reviews", business_id);
 }
