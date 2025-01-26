@@ -10,9 +10,10 @@ const bodySchema = z.object({
 });
 
 /**
- * Update the business record in the database with the provided business ID.
+ * Add the current business stats to the database for the given business ID, then return the inserted stats.
+ *
  * @param { business_id } - The database business ID to update.
- * @returns A JSON response indicating the success or failure of the operation.
+ * @returns { business_id: number, review_count: number, review_score: number } - The inserted stats.
  */
 export async function POST(request: NextRequest) {
   try {
