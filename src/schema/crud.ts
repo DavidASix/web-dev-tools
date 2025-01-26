@@ -4,6 +4,7 @@ import {
   reviews as reviewsTable,
   business_stats as businessStatsTable,
   events as eventsTable,
+  api_keys as apiKeysTable,
 } from "./schema";
 import { z } from "zod";
 
@@ -34,4 +35,8 @@ export const events = {
     event: true,
     business_id: true,
   }),
+};
+
+export const apiKeys = {
+  table: apiKeysTable,
 };

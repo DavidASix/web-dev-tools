@@ -145,3 +145,17 @@ export const events = pgTable("events", {
     .notNull(),
   timestamp: timestamp("timestamp", { withTimezone: true }).defaultNow(),
 });
+
+/**
+ * API KEYS
+ */
+
+export const api_keys = pgTable("api_keys", {
+  id: serial("id").primaryKey(),
+  key: text("key").notNull(),
+  user_id: text("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  expired: boolean("expired").default(false),
+});
