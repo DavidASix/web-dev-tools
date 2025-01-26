@@ -3,6 +3,7 @@ import {
   businesses as businessesTable,
   reviews as reviewsTable,
   business_stats as businessStatsTable,
+  events as eventsTable,
 } from "./schema";
 import { z } from "zod";
 
@@ -25,4 +26,12 @@ export const reviews = {
 
 export const businessStats = {
   table: businessStatsTable,
+};
+
+export const events = {
+  table: eventsTable,
+  insert: createInsertSchema(eventsTable).pick({
+    event: true,
+    business_id: true,
+  }),
 };

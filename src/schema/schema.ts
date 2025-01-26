@@ -6,6 +6,7 @@ import {
   integer,
   timestamp,
   real,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 export const businesses = pgTable("businesses", {
@@ -37,4 +38,22 @@ export const business_stats = pgTable("business_stats", {
   review_count: integer("review_count"),
   review_score: real("review_score"),
   created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
+export const dbEvents = pgEnum("event_types", [
+  "fetch_reviews",
+  "update_reviews",
+  "fetch_stats",
+  "update_stats",
+]);
+
+export type DBEvent = (typeof dbEvents.enumValues)[number];
+
+export const events = pgTable("events", {
+  id: serial("id").primaryKey(),
+  event: dbEvents("event"),
+  business_id: integer("business_id")
+    .references(() => businesses.id, { onDelete: "cascade" })
+    .notNull(),
+  timestamp: timestamp("timestamp", { withTimezone: true }).defaultNow(),
 });
