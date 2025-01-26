@@ -62,7 +62,7 @@ export default function Dashboard() {
       <div className="min-h-screen p-8">
         <h1 className="text-4xl font-bold mb-4">Welcome to your Dashboard</h1>
         <p className="text-lg text-muted-foreground">
-          This is where you'll manage your Google Reviews integration.
+          This is where you will manage your Google Reviews integration.
         </p>
         <Button
           variant="outline"
