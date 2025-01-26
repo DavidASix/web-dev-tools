@@ -11,7 +11,8 @@ const bodySchema = z.object({
 });
 
 /**
- * Checks if reviews/stats need updating, updates if needed, then returns latest data
+ * Checks if reviews/stats need updating, updates if needed, then returns latest data. This endpoint is called by 11ty in the clients
+ * website to ensure that their google reviews are updated any time the clients site is reuilt.
  *
  * @param { business_id: number } - The database ID of the business
  * @returns Latest reviews and stats for the business
