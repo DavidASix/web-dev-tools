@@ -1,5 +1,8 @@
 import "tailwindcss/tailwind.css";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
+
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -8,7 +11,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <SessionProvider>
+        <body>
+          {children}
+          <Toaster />
+        </body>
+      </SessionProvider>
     </html>
   );
 }
