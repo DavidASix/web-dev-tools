@@ -1,14 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { z } from "zod";
+
+import { auth } from "~/auth";
 import { updateReviews } from "../update-reviews";
 
 const bodySchema = z.object({
   business_id: z.number(),
 });
 
-export async function POST(request: NextRequest) {
+export const POST = auth(async (req) => {
   try {
-    const body = await request.json();
+    // Check for authenticated session
+    const user_id = req?.auth?.user?.id;
+    if (!user_id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await req.json();
     const { business_id } = bodySchema.parse(body);
     // Check that the provided business ID exists in the database
     if (!business_id) {
@@ -27,4 +35,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});
