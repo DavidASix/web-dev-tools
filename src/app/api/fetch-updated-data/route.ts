@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { getLastEvent } from "../utils";
+import { checkApiKey, getLastEvent } from "../utils";
 import { updateReviews } from "../google/update-reviews";
 import { updateBusinessStats } from "../google/update-business-stats";
 import { fetchReviews } from "../google/fetch-reviews";
@@ -17,8 +17,11 @@ const bodySchema = z.object({
  * @param { business_id: number } - The database ID of the business
  * @returns Latest reviews and stats for the business
  */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    const { isValid, error } = await checkApiKey(req);
+    if (!isValid) return error;
+    
     const body = await req.json();
     const { business_id } = bodySchema.parse(body);
 
