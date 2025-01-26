@@ -1,11 +1,33 @@
-import Navigation from "@/components/structure/Navigation";
+import React from "react";
+import type { Metadata } from "next";
 
-export default function Home() {
-  return (
-    <div>
-      <Navigation />
-      <h1> Hello World </h1>
-      <h2> This web app allows developers to display Google Reviews in an easy predictable way.</h2>
-    </div>
-  );
+import { auth } from "~/auth";
+import Landing from "./(site)/Landing";
+import Dashboard from "./(product)/Dashboard";
+
+const productMetadata: Metadata = {
+  title: "Admin | Google Reviews for Developers",
+};
+
+const siteMetadata: Metadata = {
+  title: "Google Reviews for Developers",
+};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const session = await auth();
+
+  if (!session) {
+    return siteMetadata;
+  } else {
+    return productMetadata;
+  }
+}
+
+export default async function Home() {
+  const session = await auth();
+  if (!session) {
+    return <Landing />;
+  } else {
+    return <Dashboard />;
+  }
 }
