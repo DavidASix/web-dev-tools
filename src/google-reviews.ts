@@ -78,7 +78,7 @@ const ReviewSchema = z.object({
       Atmosphere: z.number(),
     })
     .nullable(),
-  review_form: z.string().nullable(),
+  //review_form: z.string().nullable(), // This is a nullable object of some kind
   review_source: z.string().nullable(),
 });
 
