@@ -17,10 +17,10 @@ const bodySchema = z.object({
  * @param { business_id: number } - The database ID of the business
  * @returns Latest reviews and stats for the business
  */
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    const { isValid, error } = await checkApiKey(req);
-    if (!isValid) return error;
+    const { error } = await checkApiKey(req);
+    if (error) return error;
 
     const body = await req.json();
     const { business_id } = bodySchema.parse(body);

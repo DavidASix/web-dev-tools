@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { auth } from "~/auth";
@@ -8,10 +8,12 @@ const bodySchema = z.object({
   business_id: z.number(),
 });
 
-export const POST = auth(async (req) => {
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    // Check for authenticated session
-    const user_id = req?.auth?.user?.id;
+    // Get the auth session using the middleware
+    const session = await auth();
+    const user_id = session?.user?.id;
+
     if (!user_id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -34,4 +36,4 @@ export const POST = auth(async (req) => {
       { status: 500 },
     );
   }
-});
+}

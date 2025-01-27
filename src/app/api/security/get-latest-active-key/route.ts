@@ -4,10 +4,11 @@ import { auth } from "~/auth";
 import { db } from "@/schema/db";
 import { and, eq, desc } from "drizzle-orm";
 
-export const GET = auth(async (req) => {
+export async function GET(): Promise<NextResponse> {
   try {
-    // Check for authenticated session
-    const user_id = req?.auth?.user?.id;
+    // Get the auth session using the middleware
+    const session = await auth();
+    const user_id = session?.user?.id;
     if (!user_id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -32,4 +33,4 @@ export const GET = auth(async (req) => {
       { status: 500 },
     );
   }
-});
+}
