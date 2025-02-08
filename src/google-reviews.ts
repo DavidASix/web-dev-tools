@@ -127,7 +127,7 @@ const BusinessSchema = z.object({
     .nullable(),
   global_plus_code: z.string(),
   compound_plus_code: z.string(),
-  reviews_per_rating: z.record(z.string(), z.number()),
+  reviews_per_rating: z.record(z.string(), z.number()).nullish(),
   photo_count: z.number(),
   about: z
     .object({
@@ -147,7 +147,7 @@ const BusinessSchema = z.object({
   country: z.string().nullable(),
   posts_sample: z.any().nullable(),
   posts_link: z.string().nullable(),
-  reviews_sample: z.array(ReviewSchema.partial()),
+  reviews_sample: z.array(ReviewSchema.partial()).nullish(),
   located_in: z.object({
     google_id: z.string(),
     name: z.string(),
