@@ -17,7 +17,7 @@ export async function GET() {
       { status: 200 }
     );
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to make axios request", success: false },
       { status: 500 }

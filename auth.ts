@@ -10,6 +10,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       from: process.env.MAILER_ADDRESS,
     }),
   ],
+  trustHost: true,
   events: {
     async createUser(message) {
       const { user } = message;
