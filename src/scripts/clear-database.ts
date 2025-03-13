@@ -1,9 +1,18 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import { sql } from "drizzle-orm";
 import postgres from "postgres";
 import "dotenv/config";
-import { exit } from "process";
 
+/**
+ * Clears and recreates databases by dropping and creating them again.
+ *
+ * This function:
+ * 1. Connects to the PostgreSQL admin database using DATABASE_URL environment variable
+ * 2. Drops the "web-dev-tools" and "test" databases if they exist
+ * 3. Creates new empty versions of these databases
+ * 4. Grants appropriate privileges to the postgres user
+ *
+ * @throws {Error} If DATABASE_URL is not set or if database operations fail
+ * @returns {Promise<void>} Exits the process with code 0 on success, code 1 on failure
+ */
 async function clearDatabase() {
   // Make sure we have a database URL
   if (!process.env.DATABASE_URL) {
@@ -50,3 +59,23 @@ async function clearDatabase() {
 
 // Execute the function
 clearDatabase();
+
+/**
+ * SQL equivalent commands:
+ *
+ * -- Standard SQL commands for database operations
+ *
+ * -- Drop and recreate the main database
+ * DROP DATABASE IF EXISTS "web-dev-tools" WITH (FORCE);
+ * CREATE DATABASE "web-dev-tools";
+ * GRANT ALL PRIVILEGES ON DATABASE "web-dev-tools" TO some_username;
+ *
+ * -- Drop and recreate the test database
+ * DROP DATABASE IF EXISTS "test" WITH (FORCE);
+ * CREATE DATABASE "test";
+ * GRANT ALL PRIVILEGES ON DATABASE "test" TO some_username;
+ *
+ * -- Note: The connection to the postgres administrative database
+ * -- would need to be established through your client application
+ * -- before running these commands.
+ */
