@@ -14,6 +14,11 @@ import "dotenv/config";
  * @returns {Promise<void>} Exits the process with code 0 on success, code 1 on failure
  */
 async function clearDatabase() {
+  // Database configuration
+  const mainDbName = "web-dev-tools";
+  const testDbName = "test";
+  const dbUser = "postgres";
+
   // Make sure we have a database URL
   if (!process.env.DATABASE_URL) {
     console.error("DATABASE_URL is not set in the environment variables");
@@ -22,7 +27,7 @@ async function clearDatabase() {
 
   // Modify the connection URL to connect to postgres database instead
   const connectionString = process.env.DATABASE_URL.replace(
-    /\/web-dev-tools($|\?)/,
+    new RegExp(`\\/${mainDbName}($|\\?)`),
     "/postgres$1"
   );
   console.log(`Connecting to admin database: ${connectionString}`);
@@ -36,15 +41,17 @@ async function clearDatabase() {
     );
 
     // Now we can drop other databases safely
-    await client.unsafe(`DROP DATABASE IF EXISTS "web-dev-tools" WITH (FORCE)`);
-    await client.unsafe(`CREATE DATABASE "web-dev-tools"`);
+    await client.unsafe(`DROP DATABASE IF EXISTS "${mainDbName}" WITH (FORCE)`);
+    await client.unsafe(`CREATE DATABASE "${mainDbName}"`);
     await client.unsafe(
-      `GRANT ALL PRIVILEGES ON DATABASE "web-dev-tools" TO postgres`
+      `GRANT ALL PRIVILEGES ON DATABASE "${mainDbName}" TO ${dbUser}`
     );
 
-    await client.unsafe(`DROP DATABASE IF EXISTS "test" WITH (FORCE)`);
-    await client.unsafe(`CREATE DATABASE "test"`);
-    await client.unsafe(`GRANT ALL PRIVILEGES ON DATABASE "test" TO postgres`);
+    await client.unsafe(`DROP DATABASE IF EXISTS "${testDbName}" WITH (FORCE)`);
+    await client.unsafe(`CREATE DATABASE "${testDbName}"`);
+    await client.unsafe(
+      `GRANT ALL PRIVILEGES ON DATABASE "${testDbName}" TO ${dbUser}`
+    );
 
     console.log("Successfully cleared and recreated the databases.");
     process.exit(0); // Exit with success code
