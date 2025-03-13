@@ -14,7 +14,9 @@
     "check:format": "prettier --check ./src",
     "format": "prettier --write ./src",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "db:clear": "tsx src/scripts/clear-database.ts",
+    "db:fresh": "npm run db:clear && npm run db:migrate"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.7.4",
