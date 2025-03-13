@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5433/web-dev-tools
+      - AUTH_SECRET=${AUTH_SECRET}
+      - AUTH_URL=${AUTH_URL}
+      - AUTH_RESEND_KEY=${AUTH_RESEND_KEY}
+      - BUSINESS_ID=${BUSINESS_ID}
+      - MAILER_ADDRESS=${MAILER_ADDRESS}
+      - RAPID_KEY=${RAPID_KEY}
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"  # Changed from 5432:5432 to avoid port conflict
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=web-dev-tools
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
