@@ -41,4 +41,4 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/public ./public
 
 # Start the application
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]

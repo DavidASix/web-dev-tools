@@ -2,18 +2,25 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build: 
+      context: .
+      target: base  # Use the base image for development
+    command: npm run dev
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5433/web-dev-tools
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL}
       - AUTH_SECRET=${AUTH_SECRET}
       - AUTH_URL=${AUTH_URL}
       - AUTH_RESEND_KEY=${AUTH_RESEND_KEY}
       - BUSINESS_ID=${BUSINESS_ID}
       - MAILER_ADDRESS=${MAILER_ADDRESS}
       - RAPID_KEY=${RAPID_KEY}
+    volumes:
+      - .:/app  # Mount current directory to /app in container
+      - /app/node_modules  # Don't mount node_modules
+      - /app/.next  # Don't mount .next
     depends_on:
       - db
     restart: unless-stopped
