@@ -12,7 +12,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProvider>
-        <body> laptoppush
+        <body>
           {children}
           <Toaster />
         </body>
