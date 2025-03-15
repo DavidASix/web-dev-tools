@@ -13,7 +13,7 @@ export default function SiteLayout({
 }>) {
   return (
     <>
-      <Navigation noLoader />
+      <Navigation noAuth />
       <main>{children}</main>
       <Footer />
     </>
