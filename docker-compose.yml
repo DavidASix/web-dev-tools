@@ -26,7 +26,6 @@ services:
       - RAPID_KEY=${RAPID_KEY}
     volumes:
       - .:/app  # Mount current directory to /app in container
-      - /app/node_modules  # Don't mount node_modules
       - /app/.next  # Don't mount .next
     depends_on:
       - db
