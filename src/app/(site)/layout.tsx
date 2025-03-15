@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Navigation from "@/components/structure/Navigation";
-import Footer from "@/components/structure/Footer";
+import Navigation from "@/components/structure/navigation";
+import Footer from "@/components/structure/footer";
 
 export const metadata: Metadata = {
   title: "Google Reviews for Devs",

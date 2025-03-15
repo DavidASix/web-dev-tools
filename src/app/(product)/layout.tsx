@@ -1,5 +1,4 @@
-import Navigation from "@/components/structure/Navigation";
-import Footer from "@/components/structure/Footer";
+import Navigation from "@/components/structure/navigation";
 
 export default function ProductLayout({
   children,
@@ -10,7 +9,6 @@ export default function ProductLayout({
     <>
       <Navigation />
       <main>{children}</main>
-      <Footer />
     </>
   );
 }
