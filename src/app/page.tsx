@@ -14,20 +14,27 @@ const siteMetadata: Metadata = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const session = await auth();
-
-  if (!session) {
+  try {
+    const session = await auth();
+    if (session) {
+      return productMetadata;
+    } else {
+      return siteMetadata;
+    }
+  } catch {
     return siteMetadata;
-  } else {
-    return productMetadata;
   }
 }
 
 export default async function Home() {
-  const session = await auth();
-  if (!session) {
+  try {
+    const session = await auth();
+    if (session) {
+      return <Dashboard />;
+    } else {
+      return <Landing />;
+    }
+  } catch {
     return <Landing />;
-  } else {
-    return <Dashboard />;
   }
 }
