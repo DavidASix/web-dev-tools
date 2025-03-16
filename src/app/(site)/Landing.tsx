@@ -1,11 +1,14 @@
+"use client";
+
 import React from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import SiteLayout from "./layout";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { AuroraText } from "@/components/magicui/aurora-text";
 
 const reviews = {
   count: 65,
@@ -33,14 +36,15 @@ const reviews = {
   ],
 };
 
-export default function Landing({}) {
+export default function Landing() {
+  const router = useRouter();
   return (
     <SiteLayout>
-      <section className="py-32">
-        <div className="container text-center">
+      <section className="grow section flex">
+        <div className="grow content text-center flex flex-col justify-center items-center">
           <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
             <h1 className="text-3xl font-extrabold lg:text-6xl">
-              Static Sites Made Modern
+              Simple Modern Tools for <AuroraText>Static Websites</AuroraText>
             </h1>
             <p className="text-balance text-muted-foreground lg:text-lg">
               Do you build static sites for your clients, but struggle
@@ -48,9 +52,13 @@ export default function Landing({}) {
               right place!
             </p>
           </div>
-          <Button asChild size="lg" className="mt-10">
-            <Link href="/login">Get Started</Link>
-          </Button>
+          <ShimmerButton
+            className="mt-10 h-10 w-64"
+            shimmerSize="0.15em"
+            onClick={() => router.push("/login")}
+          >
+            Get Started
+          </ShimmerButton>
           <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
             <span className="mx-4 inline-flex items-center -space-x-4">
               {reviews.avatars.map((avatar, index) => (

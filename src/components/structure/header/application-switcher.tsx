@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const HeaderText = () => {
-  return <h1 className="font-bold text-lg">Web Dev Tools</h1>;
+  return <Link href="/" className="font-bold text-lg">Web Dev Tools</Link>;
 };
 
 export default function ApplicationSwitcher({ noAuth }: { noAuth?: boolean }) {
