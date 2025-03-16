@@ -4,16 +4,16 @@ import React from "react";
 
 function IconBase({
   children,
-  color,
+  className,
 }: {
   children: React.ReactNode;
-  color: string;
+  className?: string;
 }) {
   return (
     <div
       className={cn(
         "flex items-center justify-center w-8 h-8 rounded-full",
-        color ? color : "bg-gray-300"
+        className ? className : "bg-gray-300"
       )}
     >
       {children}
@@ -21,26 +21,26 @@ function IconBase({
   );
 }
 
-function HomeIcon() {
+function HomeIcon({ className }: { className?: string }) {
   return (
-    <IconBase color="bg-red-300">
-      <House />
+    <IconBase className={"bg-red-400"}>
+      <House className={className} />
     </IconBase>
   );
 }
 
-function GoogleReviewsIcon() {
+function GoogleReviewsIcon({ className }: { className?: string }) {
   return (
-    <IconBase color="bg-blue-300">
-      <Star />
+    <IconBase className={"bg-blue-400"}>
+      <Star className={className} />
     </IconBase>
   );
 }
 
-function BlogGeneratorIcon() {
+function BlogGeneratorIcon({ className }: { className?: string }) {
   return (
-    <IconBase color="bg-green-300">
-      <WandSparkles />
+    <IconBase className={"bg-yellow-400"}>
+      <WandSparkles className={className} />
     </IconBase>
   );
 }

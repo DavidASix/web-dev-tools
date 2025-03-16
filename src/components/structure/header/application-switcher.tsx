@@ -25,7 +25,7 @@ export default function ApplicationSwitcher({ noAuth }: { noAuth?: boolean }) {
   if (session.status === "unauthenticated" || noAuth) {
     return <HeaderText />;
   }
-  
+
   if (session.status === "loading") {
     return (
       <div className="flex items-center gap-2">
@@ -50,7 +50,7 @@ export default function ApplicationSwitcher({ noAuth }: { noAuth?: boolean }) {
           <DropdownMenuItem key={app.id} asChild>
             <Link href={app.url}>
               <div className="flex items-center gap-2">
-                <app.icon />
+                <app.icon className="h-4 w-4" />
                 <span>{app.name}</span>
               </div>
             </Link>
