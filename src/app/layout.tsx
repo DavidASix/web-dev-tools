@@ -13,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProvider>
-        <body>
+        <body className="flex flex-col min-h-screen">
           <HolyLoader />
           {children}
           <Toaster />

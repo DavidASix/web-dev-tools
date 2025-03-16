@@ -14,7 +14,7 @@ export default function SiteLayout({
   return (
     <>
       <Navigation noAuth />
-      <main>{children}</main>
+      <main className="grow flex flex-col">{children}</main>
       <Footer />
     </>
   );
