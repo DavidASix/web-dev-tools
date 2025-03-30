@@ -1,4 +1,8 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Navigation from "@/components/structure/header/navigation";
+
+const queryClient = new QueryClient();
 
 export default function ProductLayout({
   children,
@@ -7,8 +11,11 @@ export default function ProductLayout({
 }>) {
   return (
     <>
-      <Navigation />
-      <main>{children}</main>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        <Navigation />
+        <main>{children}</main>
+      </QueryClientProvider>
     </>
   );
 }
