@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import CreateNewApiKey from "@/components/api-key/create-new-api-key";
+import CreateNewApiKey from "@/components/common/api-keys/create-new-api-key";
 import { AuroraText } from "@/components/magicui/aurora-text";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import AvailableTools from "@/components/common/available-tools";

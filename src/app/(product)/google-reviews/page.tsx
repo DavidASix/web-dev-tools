@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import CreateNewApiKey from "@/components/api-key/create-new-api-key";
+import CreateNewApiKey from "@/components/common/api-keys/create-new-api-key";
 
 export default function GoogleReviewPage() {
   return (
