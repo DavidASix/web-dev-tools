@@ -36,7 +36,7 @@ const reviews = {
   ],
 };
 
-export default function Landing() {
+export default function Home() {
   const router = useRouter();
   return (
     <SiteLayout>
