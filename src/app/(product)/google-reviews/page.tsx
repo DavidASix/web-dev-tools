@@ -54,52 +54,53 @@ export default function GoogleReviewPage() {
 
   return (
     <>
-    <section className="grow section flex">
-      <div className="grow content text-center flex flex-col justify-center items-center">
-      <h1 className="text-4xl font-bold mb-4">Google Reviews</h1>
-      <p className="text-lg text-muted-foreground">
-        You have some great Google Reviews, so why aren&apos;t you displaying them?
-        This application allows you to integrate your Google Reviews as a data
-        source in a statically generated website. Your reviews will be fetched
-        then baked into your sites HTML, so they are available to search engines
-        and users without needing to make a request to the Google API.
-      </p>
-      </div>
+      <section className="grow section flex">
+        <div className="grow content text-center flex flex-col justify-center items-center">
+          <h1 className="text-4xl font-bold mb-4">Google Reviews</h1>
+          <p className="text-lg text-muted-foreground">
+            You have some great Google Reviews, so why aren&apos;t you
+            displaying them? This application allows you to integrate your
+            Google Reviews as a data source in a statically generated website.
+            Your reviews will be fetched then baked into your sites HTML, so
+            they are available to search engines and users without needing to
+            make a request to the Google API.
+          </p>
+        </div>
       </section>
 
-    <section className="grow section flex">
-    <div className="grow content text-center flex flex-col justify-center items-center">
-      <Button
-        variant="outline"
-        className="flex gap-8 items-center justify-center border rounded-md"
-        onClick={copyApiKey}
-        disabled={apiKey.isLoading}
-      >
-        {apiKey.isLoading ? (
-          <LoadingSpinner size={16} className="mr-2" />
-        ) : (
-          <>
-            <span>{apiKeyText}</span>
-            <ClipboardCopyIcon className="w-4 h-4" />
-          </>
-        )}
-      </Button>
-      <Button
-        disabled={generateKeyMutation.isPending || apiKey.isLoading}
-        onClick={generateApiKey}
-        className="flex items-center"
-      >
-        {generateKeyMutation.isPending ? (
-          <>
-            <LoadingSpinner size={16} className="mr-2" />
-            <span>Generating...</span>
-          </>
-        ) : (
-          "Generate API Key"
-        )}
-      </Button>
-    </div>
-    </section>
+      <section className="grow section flex">
+        <div className="grow content text-center flex flex-col justify-center items-center">
+          <Button
+            variant="outline"
+            className="flex gap-8 items-center justify-center border rounded-md"
+            onClick={copyApiKey}
+            disabled={apiKey.isLoading}
+          >
+            {apiKey.isLoading ? (
+              <LoadingSpinner size={16} className="mr-2" />
+            ) : (
+              <>
+                <span>{apiKeyText}</span>
+                <ClipboardCopyIcon className="w-4 h-4" />
+              </>
+            )}
+          </Button>
+          <Button
+            disabled={generateKeyMutation.isPending || apiKey.isLoading}
+            onClick={generateApiKey}
+            className="flex items-center"
+          >
+            {generateKeyMutation.isPending ? (
+              <>
+                <LoadingSpinner size={16} className="mr-2" />
+                <span>Generating...</span>
+              </>
+            ) : (
+              "Generate API Key"
+            )}
+          </Button>
+        </div>
+      </section>
     </>
   );
 }
