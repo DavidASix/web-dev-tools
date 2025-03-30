@@ -24,7 +24,7 @@ export default function GoogleReviewPage() {
 
   const generateKeyMutation = useMutation({
     mutationFn: async () => {
-      await axios.get("/api/security/generate-api-key");
+      await axios.get("/api/security/create-api-key");
     },
     onSuccess: () => {
       toast.success("API key generated successfully");
