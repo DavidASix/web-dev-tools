@@ -11,7 +11,7 @@ import { CheckCircle2 } from "lucide-react";
 
 export default function PricingOptions() {
   return (
-    <section className="space-y-8">
+    <div className="space-y-8">
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-3">Flexible Pricing Options</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -128,6 +128,6 @@ export default function PricingOptions() {
           </CardFooter>
         </Card>
       </div>
-    </section>
+    </div>
   );
 }

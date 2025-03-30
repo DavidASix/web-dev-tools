@@ -46,7 +46,7 @@ function getToolFeatures(toolId: string): string[] {
 
 export default function AvailableTools() {
   return (
-    <section className="space-y-8">
+    <div className="space-y-8">
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-3">Available Tools</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -88,6 +88,6 @@ export default function AvailableTools() {
             </Card>
           ))}
       </div>
-    </section>
+    </div>
   );
 }
