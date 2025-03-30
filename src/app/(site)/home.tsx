@@ -41,7 +41,7 @@ export default function Home() {
   const router = useRouter();
   return (
     <SiteLayout>
-      <section className="section section-padding grow flex">
+      <section className="section section-padding grow flex min-h-[60vh]">
         <div className="content text-center flex flex-col justify-center items-center">
           <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
             <h1 className="text-3xl font-extrabold lg:text-6xl">

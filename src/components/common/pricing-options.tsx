@@ -26,7 +26,7 @@ export default function PricingOptions() {
             <CardTitle>Individual Tools</CardTitle>
             <CardDescription>Pay for only what you need</CardDescription>
             <div className="mt-4">
-              <span className="text-3xl font-bold">$9.99</span>
+              <span className="text-3xl font-bold">$6.99</span>
               <span className="text-muted-foreground ml-2">per tool/month</span>
             </div>
           </CardHeader>
@@ -38,11 +38,11 @@ export default function PricingOptions() {
               </li>
               <li className="flex items-center">
                 <CheckCircle2 className="w-5 h-5 text-primary mr-2" />
-                <span>Unlimited API requests</span>
+                <span>Unlimited website connections</span>
               </li>
               <li className="flex items-center">
                 <CheckCircle2 className="w-5 h-5 text-primary mr-2" />
-                <span>Email support</span>
+                <span>30,000 requests per month *</span>
               </li>
             </ul>
           </CardContent>
@@ -62,7 +62,7 @@ export default function PricingOptions() {
             <CardTitle>Pro Subscription</CardTitle>
             <CardDescription>Access to all tools at a discount</CardDescription>
             <div className="mt-4">
-              <span className="text-3xl font-bold">$24.99</span>
+              <span className="text-3xl font-bold">$11.99</span>
               <span className="text-muted-foreground ml-2">per month</span>
             </div>
           </CardHeader>
@@ -74,15 +74,15 @@ export default function PricingOptions() {
               </li>
               <li className="flex items-center">
                 <CheckCircle2 className="w-5 h-5 text-primary mr-2" />
-                <span>Unlimited API requests</span>
+                <span>30,000 API requests</span>
               </li>
               <li className="flex items-center">
                 <CheckCircle2 className="w-5 h-5 text-primary mr-2" />
-                <span>Priority support</span>
+                <span>Email support</span>
               </li>
               <li className="flex items-center">
                 <CheckCircle2 className="w-5 h-5 text-primary mr-2" />
-                <span>Early access to new features</span>
+                <span>Instant access to new tools</span>
               </li>
             </ul>
           </CardContent>
