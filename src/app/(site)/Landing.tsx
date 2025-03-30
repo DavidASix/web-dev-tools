@@ -44,7 +44,7 @@ export default function Landing() {
         <div className="grow content text-center flex flex-col justify-center items-center">
           <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
             <h1 className="text-3xl font-extrabold lg:text-6xl">
-              Simple Modern Tools for <AuroraText>Static Websites</AuroraText>
+              Simple Tools for<br /> <AuroraText>Static Websites</AuroraText>
             </h1>
             <p className="text-balance text-muted-foreground lg:text-lg">
               Do you build static sites for your clients, but struggle
