@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -6,15 +7,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
-import CreateNewApiKey from "@/components/common/api-keys/create-new-api-key";
+import {
+  CheckCircle,
+  ClipboardCopy,
+  Eye,
+  EyeOff,
+  RefreshCw,
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { z } from "zod";
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/custom/loading-spinner";
+import { toast } from "sonner";
 
 export default function GoogleReviewPage() {
+  const [showApiKey, setShowApiKey] = useState(false);
+
   // Query to check if API key exists
   const apiKeyQuery = useQuery({
     queryKey: ["apiKey"],
@@ -30,6 +39,17 @@ export default function GoogleReviewPage() {
 
   const hasApiKey = !apiKeyQuery.isLoading && apiKeyQuery.data?.apiKey;
 
+  const copyApiKey = () => {
+    if (apiKeyQuery.data?.apiKey) {
+      navigator.clipboard.writeText(apiKeyQuery.data.apiKey);
+      toast.success("API key copied to clipboard");
+    }
+  };
+
+  const toggleApiKeyVisibility = () => {
+    setShowApiKey(!showApiKey);
+  };
+
   return (
     <div className="container mx-auto py-10 space-y-12 max-w-4xl">
       {/* Header Section */}
@@ -44,9 +64,6 @@ export default function GoogleReviewPage() {
           </p>
         </div>
       </section>
-
-      {/* API Key Card - Now a separate component */}
-      <CreateNewApiKey />
 
       {/* How to Use Section */}
       <section className="section section-padding space-y-6">
@@ -67,9 +84,60 @@ export default function GoogleReviewPage() {
                     <span>Checking API key status...</span>
                   </div>
                 ) : hasApiKey ? (
-                  <div className="flex items-center space-x-2 text-green-600">
-                    <CheckCircle className="w-5 h-5" />
-                    <span>API key generated</span>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2 font-semibold">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <span className="text-lg">API key valid</span>
+                    </div>
+
+                    <div className="bg-green-50 border border-green-200 p-3 rounded-md font-mono font-bold text-sm overflow-x-auto whitespace-nowrap max-w-full">
+                      {apiKeyQuery.data?.apiKey
+                        ? showApiKey
+                          ? apiKeyQuery.data.apiKey
+                          : `${apiKeyQuery.data.apiKey.slice(0, 8)}************************`
+                        : ""}
+                    </div>
+
+                    <div className="flex space-x-2 justify-around">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        asChild
+                        className="flex items-center space-x-1"
+                      >
+                        <Link href="/dashboard#keys">
+                          <RefreshCw className="w-4 h-4" />
+                          <span>Regenerate</span>
+                        </Link>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={toggleApiKeyVisibility}
+                        className="flex items-center space-x-1"
+                      >
+                        {showApiKey ? (
+                          <>
+                            <EyeOff className="w-4 h-4" />
+                            <span>Hide</span>
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" />
+                            <span>View</span>
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={copyApiKey}
+                        className="flex items-center space-x-1"
+                      >
+                        <ClipboardCopy className="w-4 h-4" />
+                        <span>Copy</span>
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">

@@ -30,7 +30,7 @@ export default function DashboardPage() {
       <AvailableTools />
 
       {/* API Key Section */}
-      <section className="max-w-3xl mx-auto">
+      <section className="max-w-3xl mx-auto" id="keys">
         <h2 className="text-3xl font-bold text-center mb-6">Your API Key</h2>
         <CreateNewApiKey />
       </section>
