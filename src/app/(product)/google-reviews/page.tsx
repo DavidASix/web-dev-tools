@@ -1,32 +1,26 @@
 "use client";
-
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
 import { ClipboardCopyIcon } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
+import { z } from "zod";
 
 export default function GoogleReviewPage() {
-  const [apiKey, setApiKey] = useState<string | null>(null);
-  const [loadingKey, setLoadingKey] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchLatestActiveKey = async () => {
-      try {
-        const { data } = await axios.get("/api/security/get-latest-active-key");
-        console.log(data);
-        if (data.apiKey) {
-          setApiKey(data.apiKey);
-        }
-      } catch (error) {
-        console.error("Error fetching active API key count:", error);
-        toast.error("Error fetching active API key count");
-      } finally {
-        setLoadingKey(false);
+  const apiKey = useQuery({
+    queryKey: ["apiKey"],
+    queryFn: async () => {
+      const { data } = await axios.get("/api/security/get-latest-active-key");
+      const parsed = z.object({ apiKey: z.string() }).parse(data);
+      if (!parsed) {
+        throw new Error("No API key found");
       }
-    };
-    fetchLatestActiveKey();
-  }, []);
+      return parsed;
+    },
+    meta: {
+      errorMessage: "Failed to fetch API key",
+    },
+  });
 
   const generateApiKey = async () => {
     try {
@@ -46,14 +40,14 @@ export default function GoogleReviewPage() {
   };
 
   const copyApiKey = () => {
-    navigator.clipboard.writeText(apiKey ?? "");
+    navigator.clipboard.writeText(apiKey.data?.apiKey ?? "");
     toast.success("API key copied to clipboard");
   };
 
-  const apiKeyText = loadingKey
+  const apiKeyText = apiKey.isLoading
     ? "Fetching..."
-    : apiKey
-      ? `${apiKey.slice(0, 8)}************************`
+    : apiKey.data
+      ? `${apiKey.data.apiKey.slice(0, 8)}************************`
       : "Generate a key below";
 
   return (
