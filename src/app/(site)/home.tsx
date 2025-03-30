@@ -9,6 +9,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import SiteLayout from "./layout";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { AuroraText } from "@/components/magicui/aurora-text";
+import PricingOptions from "@/components/common/pricing-options";
 
 const reviews = {
   count: 65,
@@ -40,11 +41,12 @@ export default function Home() {
   const router = useRouter();
   return (
     <SiteLayout>
-      <section className="grow section flex">
-        <div className="grow content text-center flex flex-col justify-center items-center">
+      <section className="section section-padding grow flex">
+        <div className="content text-center flex flex-col justify-center items-center">
           <div className="mx-auto flex max-w-screen-lg flex-col gap-6">
             <h1 className="text-3xl font-extrabold lg:text-6xl">
-              Simple Tools for<br /> <AuroraText>Static Websites</AuroraText>
+              Simple Tools for
+              <br /> <AuroraText>Static Websites</AuroraText>
             </h1>
             <p className="text-balance text-muted-foreground lg:text-lg">
               Do you build static sites for your clients, but struggle
@@ -81,6 +83,11 @@ export default function Home() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="section section-padding">
+        <div className="content flex flex-col items-center justify-center gap-10">
+          <PricingOptions />
         </div>
       </section>
     </SiteLayout>
