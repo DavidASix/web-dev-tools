@@ -1,5 +1,5 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { ClipboardCopyIcon } from "lucide-react";
 import axios from "axios";
@@ -22,21 +22,22 @@ export default function GoogleReviewPage() {
     },
   });
 
-  const generateApiKey = async () => {
-    try {
-      setLoadingKey(true);
-      const { data } = await axios.get("/api/security/generate-api-key");
-      setApiKey(data.key);
+  const generateKeyMutation = useMutation({
+    mutationFn: async () => {
+      await axios.get("/api/security/generate-api-key");
+    },
+    onSuccess: () => {
       toast.success("API key generated successfully");
-      setTimeout(() => {
-        copyApiKey();
-      }, 500);
-    } catch (error) {
-      console.error("Error generating API key:", error);
+      apiKey.refetch();
+    },
+    onError: (error) => {
+      console.log("Error generating API key:", error);
       toast.error("Error generating API key");
-    } finally {
-      setLoadingKey(false);
-    }
+    },
+  });
+
+  const generateApiKey = () => {
+    generateKeyMutation.mutate();
   };
 
   const copyApiKey = () => {
