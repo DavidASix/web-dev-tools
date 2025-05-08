@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { checkApiKey, getLastEvent } from "../utils";
+import { checkApiKey } from "@/lib/server/api-keys";
+import { getLastEvent } from "@/lib/server/events";
 import { updateReviews } from "../google/update-reviews";
 import { updateBusinessStats } from "../google/update-business-stats";
 import { fetchReviews } from "../google/fetch-reviews";
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     if (!business_id) {
       return NextResponse.json(
         { error: "Business ID is required" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -65,7 +66,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     console.error("Error processing request:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

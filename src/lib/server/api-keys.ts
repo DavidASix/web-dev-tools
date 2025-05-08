@@ -1,35 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, eq, desc } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { db } from "@/schema/db";
-import { type DBEvent } from "@/schema/schema";
-import { events, apiKeys } from "@/schema/crud";
-
-export async function recordEvent(event: DBEvent, business_id: number) {
-  const eventData = {
-    event: event,
-    business_id: business_id,
-  };
-
-  await db.insert(events.table).values(eventData);
-}
-
-export async function getLastEvent(event: DBEvent, business_id: number) {
-  const lastEvent = await db
-    .select()
-    .from(events.table)
-    .where(
-      and(
-        eq(events.table.business_id, business_id),
-        eq(events.table.event, event),
-      ),
-    )
-    .orderBy(desc(events.table.timestamp))
-    .limit(1)
-    .then((rows) => rows[0]);
-
-  return lastEvent;
-}
+import { apiKeys } from "@/schema/crud";
 
 /**
  * API KEYS
@@ -65,7 +38,7 @@ export async function apiKeyIsValid(key: string) {
     .select()
     .from(apiKeys.table)
     .where(
-      and(eq(apiKeys.table.key, hashedKey), eq(apiKeys.table.expired, false)),
+      and(eq(apiKeys.table.key, hashedKey), eq(apiKeys.table.expired, false))
     )
     .then((rows) => rows[0]);
   return apiKey !== undefined;

@@ -1,7 +1,7 @@
 import { db } from "@/schema/db";
 import { businessStats } from "@/schema/crud";
 import { desc, eq } from "drizzle-orm";
-import { recordEvent } from "../utils";
+import { recordEvent } from "@/lib/server/events";
 
 /**
  * Fetch the latest business stats for a given business ID

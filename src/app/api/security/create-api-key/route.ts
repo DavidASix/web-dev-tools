@@ -3,7 +3,7 @@ import { apiKeys } from "@/schema/crud";
 import { auth } from "~/auth";
 import { db } from "@/schema/db";
 import { eq } from "drizzle-orm";
-import { generateApiKey } from "../../utils";
+import { generateApiKey } from "@/lib/server/api-keys";
 
 export async function GET(): Promise<NextResponse> {
   try {

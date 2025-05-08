@@ -1,7 +1,7 @@
 import { db } from "@/schema/db";
 import { businessStats, businesses } from "@/schema/crud";
 import { eq } from "drizzle-orm";
-import { recordEvent } from "../utils";
+import { recordEvent } from "@/lib/server/events";
 import GoogleReviews from "@/google-reviews";
 
 /**
