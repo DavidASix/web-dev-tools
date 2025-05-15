@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import { auth } from "~/auth";
 import type { NextRequest } from "next/server";
-import { User } from "next-auth";
 
 /**
  * Middleware wrapper to ensure that the user is authenticated before proceeding with the request.
  */
 export function withAuth<T extends unknown[]>(
-  handler: (req: NextRequest, user: User, ...args: T) => Promise<Response>
+  handler: (req: NextRequest, user_id: string, ...args: T) => Promise<Response>
 ) {
   return async function (req: NextRequest, ...args: T): Promise<Response> {
     // Get the auth session
@@ -15,6 +14,6 @@ export function withAuth<T extends unknown[]>(
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return handler(req, session.user, ...args);
+    return handler(req, session.user.id, ...args);
   };
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { checkApiKey } from "@/lib/server/api-keys";
+import { withApiKey } from "@/middleware/withApiKey";
 import { getLastEvent } from "@/lib/server/events";
 import { updateReviews } from "../google/update-reviews";
 import { updateBusinessStats } from "../google/update-business-stats";
@@ -18,11 +18,8 @@ const bodySchema = z.object({
  * @param { business_id: number } - The database ID of the business
  * @returns Latest reviews and stats for the business
  */
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export const POST = withApiKey(async (req: NextRequest) => {
   try {
-    const { error } = await checkApiKey(req);
-    if (error) return error;
-
     const body = await req.json();
     const { business_id } = bodySchema.parse(body);
 
@@ -69,4 +66,4 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { status: 500 }
     );
   }
-}
+});

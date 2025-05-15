@@ -1,20 +1,13 @@
 import { NextResponse } from "next/server";
-import { apiKeys } from "@/schema/crud";
-import { auth } from "~/auth";
-import { db } from "@/schema/db";
 import { eq } from "drizzle-orm";
+
+import { apiKeys } from "@/schema/crud";
+import { db } from "@/schema/db";
 import { generateApiKey } from "@/lib/server/api-keys";
+import { withAuth } from "@/middleware/withAuth";
 
-export async function GET(): Promise<NextResponse> {
+export const GET = withAuth(async (req, user_id) => {
   try {
-    // Get the auth session using the middleware
-    const session = await auth();
-    const user_id = session?.user?.id;
-
-    if (!user_id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     await db
       .update(apiKeys.table)
       .set({ expired: true })
@@ -27,7 +20,7 @@ export async function GET(): Promise<NextResponse> {
     console.error("Error processing request:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
-}
+});
