@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
 import { withAuth } from "@/middleware/withAuth";
 import { fetchReviews } from "../fetch-reviews";
-
-const bodySchema = z.object({
-  business_id: z.number(),
-});
+import schema from "./schema";
 
 export const POST = withAuth(async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const { business_id } = bodySchema.parse(body);
+    const { business_id } = schema.request.parse(body);
 
     if (!business_id) {
       return NextResponse.json(
@@ -21,7 +17,8 @@ export const POST = withAuth(async (req: NextRequest) => {
     }
 
     const businessReviews = await fetchReviews(business_id);
-    return NextResponse.json(businessReviews);
+    const response = schema.response.parse(businessReviews);
+    return NextResponse.json(response);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
