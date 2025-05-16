@@ -6,18 +6,16 @@ const schema = {
   request: z.object({
     business_id: z.number(),
   }),
-  response: z.object({
-    reviews: z
-      .object({
-        author_name: z.string().nullable(),
-        author_image: z.string().nullable(),
-        datetime: z.string().nullable(),
-        link: z.string().nullable(),
-        rating: z.number().nullable(),
-        comments: z.string().nullable(),
-      })
-      .array(),
-  }),
+  response: z
+    .object({
+      author_name: z.string().nullable(),
+      author_image: z.string().nullable(),
+      datetime: z.string().nullable(),
+      link: z.string().nullable(),
+      rating: z.number().nullable(),
+      comments: z.string().nullable(),
+    })
+    .array(),
 } satisfies APISchema;
 
 export default schema;
