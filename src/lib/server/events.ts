@@ -20,8 +20,8 @@ export async function getLastEvent(event: DBEvent, business_id: number) {
     .where(
       and(
         eq(events.table.business_id, business_id),
-        eq(events.table.event, event)
-      )
+        eq(events.table.event, event),
+      ),
     )
     .orderBy(desc(events.table.timestamp))
     .limit(1)

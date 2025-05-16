@@ -48,7 +48,7 @@ export default function Home() {
     <section className="flex grow section section-padding">
       <div className="grow content flex flex-col items-center justify-center">
         {status === "loading" ? (
-            <LoadingSpinner />
+          <LoadingSpinner />
         ) : (
           <form action={(e) => handleSignIn(e)} className="flex flex-col gap-4">
             <Input type="text" name="email" placeholder="Email" />

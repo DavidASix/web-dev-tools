@@ -15,7 +15,7 @@ const confirmMigration = (): Promise<boolean> => {
       "\n⚠️ WARNING: You are about to run migrations on the PRODUCTION database! ⚠️\nAre you sure you want to continue? (yes/no): ",
       (answer) => {
         resolve(answer.toLowerCase() === "yes");
-      }
+      },
     );
   });
 };
@@ -31,7 +31,7 @@ const runMigration = async () => {
   console.log("Migrations folder:", migrationsFolder);
   console.log(
     "Target database:",
-    connectionString.split("@")[1]?.split("/")[0] || "unknown"
+    connectionString.split("@")[1]?.split("/")[0] || "unknown",
   );
 
   const confirmed = await confirmMigration();

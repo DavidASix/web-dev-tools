@@ -26,7 +26,10 @@ export async function apiKeyIsValid(key: string) {
     .select()
     .from(apiKeys.table)
     .where(
-      and(eq(apiKeys.table.key, encryptedKey), eq(apiKeys.table.expired, false))
+      and(
+        eq(apiKeys.table.key, encryptedKey),
+        eq(apiKeys.table.expired, false),
+      ),
     )
     .then((rows) => rows[0]);
   return apiKey?.user_id;

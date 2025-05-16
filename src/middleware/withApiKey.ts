@@ -21,7 +21,7 @@ type APIAuthContext = {
  * ```
  */
 export function withApiKey<T extends object & { user_id?: never }>(
-  handler: RequestHandler<T & APIAuthContext>
+  handler: RequestHandler<T & APIAuthContext>,
 ): RequestHandler<T> {
   return async function (req, context: T) {
     try {

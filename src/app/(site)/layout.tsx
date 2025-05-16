@@ -1,7 +1,6 @@
 import Navigation from "@/components/structure/header/navigation";
 import Footer from "@/components/structure/footer";
 
-
 export default function SiteLayout({
   children,
 }: Readonly<{

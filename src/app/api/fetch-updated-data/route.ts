@@ -21,44 +21,51 @@ import { fetchBusinessStats } from "../google/fetch-business-stats";
  */
 export const POST: RequestHandler<NextRouteContext> = withApiKey(
   withBody(schema, async (_, context) => {
-  try {
-    const { business_id } = context.body
+    try {
+      const { business_id } = context.body;
 
-    const oneDayAgo = new Date();
-    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+      const oneDayAgo = new Date();
+      oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 
-    // Check last update times
-    const lastUpdateReviews = await getLastEvent("update_reviews", business_id);
-    const lastUpdateStats = await getLastEvent("update_stats", business_id);
+      // Check last update times
+      const lastUpdateReviews = await getLastEvent(
+        "update_reviews",
+        business_id,
+      );
+      const lastUpdateStats = await getLastEvent("update_stats", business_id);
 
-    // If data is out of date, fetch and update
-    if (
-      !lastUpdateReviews?.timestamp ||
-      lastUpdateReviews.timestamp < oneDayAgo
-    ) {
-      await updateReviews(business_id);
+      // If data is out of date, fetch and update
+      if (
+        !lastUpdateReviews?.timestamp ||
+        lastUpdateReviews.timestamp < oneDayAgo
+      ) {
+        await updateReviews(business_id);
+      }
+
+      if (
+        !lastUpdateStats?.timestamp ||
+        lastUpdateStats.timestamp < oneDayAgo
+      ) {
+        await updateBusinessStats(business_id);
+      }
+
+      // Get the data
+      const [reviews, stats] = await Promise.all([
+        fetchReviews(business_id),
+        fetchBusinessStats(business_id),
+      ]);
+
+      const response = schema.response.parse({
+        reviews,
+        stats,
+      });
+      return NextResponse.json(response);
+    } catch (error) {
+      console.error("Error processing request:", error);
+      return NextResponse.json(
+        { error: "Internal Server Error" },
+        { status: 500 },
+      );
     }
-
-    if (!lastUpdateStats?.timestamp || lastUpdateStats.timestamp < oneDayAgo) {
-      await updateBusinessStats(business_id);
-    }
-
-    // Get the data
-    const [reviews, stats] = await Promise.all([
-      fetchReviews(business_id),
-      fetchBusinessStats(business_id),
-    ]);
-
-    const response = schema.response.parse({
-      reviews,
-      stats,
-    });
-    return NextResponse.json(response);
-  } catch (error) {
-    console.error("Error processing request:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
-}));
+  }),
+);

@@ -27,5 +27,5 @@ export interface NextRouteContext {
  */
 export type RequestHandler<T> = (
   req: NextRequest,
-  context: T
+  context: T,
 ) => Promise<NextResponse>;

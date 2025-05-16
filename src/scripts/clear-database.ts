@@ -28,7 +28,7 @@ async function clearDatabase() {
   // Modify the connection URL to connect to postgres database instead
   const connectionString = process.env.DATABASE_URL.replace(
     new RegExp(`\\/${mainDbName}($|\\?)`),
-    "/postgres$1"
+    "/postgres$1",
   );
   console.log(`Connecting to admin database: ${connectionString}`);
 
@@ -37,20 +37,20 @@ async function clearDatabase() {
 
   try {
     console.log(
-      "Connected to postgres database. Preparing to drop and recreate target databases..."
+      "Connected to postgres database. Preparing to drop and recreate target databases...",
     );
 
     // Now we can drop other databases safely
     await client.unsafe(`DROP DATABASE IF EXISTS "${mainDbName}" WITH (FORCE)`);
     await client.unsafe(`CREATE DATABASE "${mainDbName}"`);
     await client.unsafe(
-      `GRANT ALL PRIVILEGES ON DATABASE "${mainDbName}" TO ${dbUser}`
+      `GRANT ALL PRIVILEGES ON DATABASE "${mainDbName}" TO ${dbUser}`,
     );
 
     await client.unsafe(`DROP DATABASE IF EXISTS "${testDbName}" WITH (FORCE)`);
     await client.unsafe(`CREATE DATABASE "${testDbName}"`);
     await client.unsafe(
-      `GRANT ALL PRIVILEGES ON DATABASE "${testDbName}" TO ${dbUser}`
+      `GRANT ALL PRIVILEGES ON DATABASE "${testDbName}" TO ${dbUser}`,
     );
 
     console.log("Successfully cleared and recreated the databases.");

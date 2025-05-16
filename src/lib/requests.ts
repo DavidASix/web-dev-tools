@@ -14,7 +14,7 @@ async function get<
   TRespSchema extends ZodTypeAny,
 >(
   apiSchema: APISchema<TReqSchema, TRespSchema>,
-  config?: Parameters<typeof axios.get>[1]
+  config?: Parameters<typeof axios.get>[1],
 ): Promise<z.infer<TRespSchema>> {
   const { url, response } = apiSchema;
   const { data: responseData } = await axios.get(url, config);
@@ -37,7 +37,7 @@ async function post<
 >(
   apiSchema: APISchema<TReqSchema, TRespSchema>,
   body: unknown,
-  config?: Parameters<typeof axios.post>[2]
+  config?: Parameters<typeof axios.post>[2],
 ): Promise<z.infer<TRespSchema>> {
   const { url, request, response } = apiSchema;
   const parsedBody = request.parse(body);

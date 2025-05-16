@@ -31,7 +31,7 @@ export function withBody<
   T extends object & { body?: never },
 >(
   apiSchema: APISchema<TReqSchema, TRespSchema>,
-  handler: RequestHandler<T & BodyContext<z.infer<TReqSchema>>>
+  handler: RequestHandler<T & BodyContext<z.infer<TReqSchema>>>,
 ): RequestHandler<T> {
   return async function (req, context: T) {
     const body = await req.json();
@@ -49,7 +49,7 @@ export function withBody<
       console.error("Error parsing request body:", error);
       return NextResponse.json(
         { error: "Invalid request body" },
-        { status: 400 }
+        { status: 400 },
       );
     }
   };

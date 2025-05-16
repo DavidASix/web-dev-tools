@@ -11,7 +11,7 @@ export const POST: RequestHandler<NextRouteContext> = withAuth(
   withBody(schema, async (_, context) => {
     try {
       const { business_id } = context.body;
-      
+
       const insertedStats = await updateBusinessStats(business_id);
       const response = schema.response.parse(insertedStats);
       return NextResponse.json(response, { status: 200 });
@@ -19,8 +19,8 @@ export const POST: RequestHandler<NextRouteContext> = withAuth(
       console.error("Error processing request:", error);
       return NextResponse.json(
         { error: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
-  })
+  }),
 );

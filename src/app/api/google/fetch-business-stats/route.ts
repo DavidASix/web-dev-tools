@@ -19,8 +19,8 @@ export const POST: RequestHandler<NextRouteContext> = withAuth(
       console.log(error);
       return NextResponse.json(
         { error: "Internal server error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
-  })
+  }),
 );

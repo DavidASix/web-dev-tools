@@ -38,7 +38,7 @@ async function createDeterministicIV(text: string): Promise<ArrayBuffer> {
   // Combine the text with the encryption key for IV generation
   const encoder = new TextEncoder();
   const combinedData = encoder.encode(
-    text + process.env.ENCRYPTION_KEY + "IV_SALT"
+    text + process.env.ENCRYPTION_KEY + "IV_SALT",
   );
 
   // Create a hash of the combined data
@@ -69,7 +69,7 @@ async function deriveKey(): Promise<CryptoKey> {
     rawKey.slice(0, 32), // Use first 32 bytes for AES-256
     { name: "AES-CBC", length: 256 },
     false,
-    ["encrypt", "decrypt"]
+    ["encrypt", "decrypt"],
   );
 }
 
@@ -91,7 +91,7 @@ export async function encryptNonDeterministic(text: string): Promise<string> {
   const encryptedData = await crypto.subtle.encrypt(
     { name: "AES-CBC", iv: iv.buffer as ArrayBuffer },
     key,
-    stringToArrayBuffer(text)
+    stringToArrayBuffer(text),
   );
 
   // Return IV and encrypted content as hex
@@ -120,7 +120,7 @@ export async function encryptDeterministic(text: string): Promise<string> {
   const encryptedData = await crypto.subtle.encrypt(
     { name: "AES-CBC", iv },
     key,
-    stringToArrayBuffer(text)
+    stringToArrayBuffer(text),
   );
 
   // Return IV and encrypted content as hex
@@ -150,7 +150,7 @@ export async function decrypt(encryptedText: string): Promise<string> {
   const decryptedData = await crypto.subtle.decrypt(
     { name: "AES-CBC", iv },
     key,
-    encryptedData
+    encryptedData,
   );
 
   // Convert ArrayBuffer back to string

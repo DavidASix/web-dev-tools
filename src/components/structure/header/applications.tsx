@@ -13,7 +13,7 @@ function IconBase({
     <div
       className={cn(
         "flex items-center justify-center w-8 h-8 rounded-full",
-        className ? className : "bg-gray-300"
+        className ? className : "bg-gray-300",
       )}
     >
       {children}

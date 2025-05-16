@@ -19,8 +19,8 @@ export const GET: RequestHandler<NextRouteContext> = withAuth(
         .where(
           and(
             eq(apiKeys.table.user_id, user_id),
-            eq(apiKeys.table.expired, false)
-          )
+            eq(apiKeys.table.expired, false),
+          ),
         )
         .orderBy(desc(apiKeys.table.created_at))
         .then((rows) => rows[0]);
@@ -33,8 +33,8 @@ export const GET: RequestHandler<NextRouteContext> = withAuth(
       console.error("Error processing request:", error);
       return NextResponse.json(
         { error: "Internal Server Error" },
-        { status: 500 }
+        { status: 500 },
       );
     }
-  }
+  },
 );

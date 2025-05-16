@@ -19,8 +19,8 @@ export const POST: RequestHandler<NextRouteContext> = withAuth(
       console.log(error);
       return NextResponse.json(
         { error: "Something went wrong" },
-        { status: 400 }
+        { status: 400 },
       );
     }
-  })
+  }),
 );
