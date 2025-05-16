@@ -19,7 +19,7 @@ type AuthContext = {
  * );
  * ```
  */
-export function withAuth<T>(
+export function withAuth<T extends object & { user_id?: never }>(
   handler: RequestHandler<T & AuthContext>
 ): RequestHandler<T> {
   return async function (req, context: T) {
