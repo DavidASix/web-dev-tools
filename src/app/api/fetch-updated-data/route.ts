@@ -1,31 +1,28 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
+import schema from "./schema";
+import { NextRouteContext, RequestHandler } from "@/middleware/types";
+import { withBody } from "@/middleware/withBody";
 import { withApiKey } from "@/middleware/withApiKey";
+
 import { getLastEvent } from "@/lib/server/events";
+
 import { updateReviews } from "../google/update-reviews";
 import { updateBusinessStats } from "../google/update-business-stats";
 import { fetchReviews } from "../google/fetch-reviews";
 import { fetchBusinessStats } from "../google/fetch-business-stats";
-import schema from "./schema";
 
 /**
  * Checks if reviews/stats need updating, updates if needed, then returns latest data. This endpoint is called by 11ty in the clients
- * website to ensure that their google reviews are updated any time the clients site is reuilt.
+ * website to ensure that their google reviews are updated any time the clients site is rebuilt.
  *
  * @param { business_id: number } - The database ID of the business
  * @returns Latest reviews and stats for the business
  */
-export const POST = withApiKey(async (req: NextRequest) => {
+export const POST: RequestHandler<NextRouteContext> = withApiKey(
+  withBody(schema, async (_, context) => {
   try {
-    const body = await req.json();
-    const { business_id } = schema.request.parse(body);
-
-    if (!business_id) {
-      return NextResponse.json(
-        { error: "Business ID is required" },
-        { status: 400 }
-      );
-    }
+    const { business_id } = context.body
 
     const oneDayAgo = new Date();
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
@@ -64,4 +61,4 @@ export const POST = withApiKey(async (req: NextRequest) => {
       { status: 500 }
     );
   }
-});
+}));

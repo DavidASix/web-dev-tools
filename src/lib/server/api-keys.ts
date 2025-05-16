@@ -14,6 +14,12 @@ export async function generateApiKey(user_id: string) {
   return key;
 }
 
+/**
+ * Function to check if an API key is valid, if so returns the user_id associated with it.
+ *
+ * @param key
+ * @returns user_id if the API key is valid, otherwise undefined.
+ */
 export async function apiKeyIsValid(key: string) {
   const encryptedKey = await encryptDeterministic(key);
   const apiKey = await db
@@ -23,7 +29,7 @@ export async function apiKeyIsValid(key: string) {
       and(eq(apiKeys.table.key, encryptedKey), eq(apiKeys.table.expired, false))
     )
     .then((rows) => rows[0]);
-  return apiKey !== undefined;
+  return apiKey?.user_id;
 }
 
 export async function invalidateApiKey(key: string) {
@@ -40,7 +46,7 @@ export async function checkApiKey(request: NextRequest): Promise<{
 }> {
   const key = request.headers.get("authorization")?.split(" ")[1];
   const encryptedKey = await encryptDeterministic(key || "");
-  const isValid = await apiKeyIsValid(encryptedKey);
+  const isValid = Boolean(await apiKeyIsValid(encryptedKey));
 
   const response = {
     isValid: isValid,
