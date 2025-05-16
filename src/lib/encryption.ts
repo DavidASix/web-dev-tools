@@ -6,7 +6,7 @@
  * Converts string to ArrayBuffer for Web Crypto API
  */
 function stringToArrayBuffer(str: string): ArrayBuffer {
-  return new TextEncoder().encode(str).buffer;
+  return new TextEncoder().encode(str).buffer as ArrayBuffer;
 }
 
 /**
