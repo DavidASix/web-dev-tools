@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+
 import { withApiKey } from "@/middleware/withApiKey";
 import { getLastEvent } from "@/lib/server/events";
 import { updateReviews } from "../google/update-reviews";
 import { updateBusinessStats } from "../google/update-business-stats";
 import { fetchReviews } from "../google/fetch-reviews";
 import { fetchBusinessStats } from "../google/fetch-business-stats";
-
-const bodySchema = z.object({
-  business_id: z.number(),
-});
+import schema from "./schema";
 
 /**
  * Checks if reviews/stats need updating, updates if needed, then returns latest data. This endpoint is called by 11ty in the clients
@@ -21,7 +18,7 @@ const bodySchema = z.object({
 export const POST = withApiKey(async (req: NextRequest) => {
   try {
     const body = await req.json();
-    const { business_id } = bodySchema.parse(body);
+    const { business_id } = schema.request.parse(body);
 
     if (!business_id) {
       return NextResponse.json(
@@ -55,10 +52,11 @@ export const POST = withApiKey(async (req: NextRequest) => {
       fetchBusinessStats(business_id),
     ]);
 
-    return NextResponse.json({
+    const response = schema.response.parse({
       reviews,
       stats,
     });
+    return NextResponse.json(response);
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(
