@@ -4,6 +4,7 @@ import { apiKeys } from "@/schema/crud";
 import { db } from "@/schema/db";
 import { decrypt } from "@/lib/encryption";
 import { withAuth } from "@/middleware/withAuth";
+import schema from "./schema";
 
 export const GET = withAuth(async (_, user_id) => {
   try {
@@ -19,7 +20,10 @@ export const GET = withAuth(async (_, user_id) => {
       .orderBy(desc(apiKeys.table.created_at))
       .then((rows) => rows[0]);
     const decryptedKey = await decrypt(apiKey?.key || "");
-    return NextResponse.json({ apiKey: decryptedKey }, { status: 200 });
+    const response = schema.response.parse({
+      apiKey: decryptedKey,
+    });
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error("Error processing request:", error);
     return NextResponse.json(
