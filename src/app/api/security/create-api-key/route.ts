@@ -1,12 +1,14 @@
+import "server-only";
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
+import schema from "./schema";
 
 import { apiKeys } from "@/schema/crud";
 import { db } from "@/schema/db";
 import { generateApiKey } from "@/lib/server/api-keys";
 import { withAuth } from "@/middleware/withAuth";
 
-export const GET = withAuth(async (req, user_id) => {
+export const GET = withAuth(async (_, user_id) => {
   try {
     await db
       .update(apiKeys.table)
@@ -15,6 +17,7 @@ export const GET = withAuth(async (req, user_id) => {
 
     const key = await generateApiKey(user_id);
 
+    schema.response.parse(key);
     return NextResponse.json({ key }, { status: 200 });
   } catch (error) {
     console.error("Error processing request:", error);
