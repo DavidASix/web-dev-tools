@@ -1,29 +1,26 @@
 import { NextResponse } from "next/server";
 
-import { withAuth } from "@/middleware/withAuth";
-import { fetchBusinessStats } from "../fetch-business-stats";
 import schema from "./schema";
+import { NextRouteContext, RequestHandler } from "@/middleware/types";
+import { withAuth } from "@/middleware/withAuth";
+import { withBody } from "@/middleware/withBody";
 
-export const POST = withAuth(async (req) => {
-  try {
-    const body = await req.json();
-    const { business_id } = schema.request.parse(body);
+import { fetchBusinessStats } from "../fetch-business-stats";
 
-    if (!business_id) {
+export const POST: RequestHandler<NextRouteContext> = withAuth(
+  withBody(schema, async (_, context) => {
+    try {
+      const { business_id } = context.body;
+
+      const latestStats = await fetchBusinessStats(business_id);
+      const response = schema.response.parse(latestStats);
+      return NextResponse.json(response);
+    } catch (error) {
+      console.log(error);
       return NextResponse.json(
-        { error: "Business ID is required" },
-        { status: 400 }
+        { error: "Internal server error" },
+        { status: 500 }
       );
     }
-
-    const latestStats = await fetchBusinessStats(business_id);
-    const response = schema.response.parse(latestStats);
-    return NextResponse.json(response);
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-});
+  })
+);

@@ -1,29 +1,26 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-import { withAuth } from "@/middleware/withAuth";
-import { updateReviews } from "../update-reviews";
 import schema from "./schema";
+import { NextRouteContext, RequestHandler } from "@/middleware/types";
+import { withAuth } from "@/middleware/withAuth";
+import { withBody } from "@/middleware/withBody";
 
-export const POST = withAuth(async (req: NextRequest) => {
-  try {
-    const body = await req.json();
-    const { business_id } = schema.request.parse(body);
-    // Check that the provided business ID exists in the database
-    if (!business_id) {
+import { updateReviews } from "../update-reviews";
+
+export const POST: RequestHandler<NextRouteContext> = withAuth(
+  withBody(schema, async (_, context) => {
+    try {
+      const { business_id } = context.body;
+
+      await updateReviews(business_id);
+      const response = schema.response.parse({});
+      return NextResponse.json(response, { status: 200 });
+    } catch (error) {
+      console.error("Error processing request:", error);
       return NextResponse.json(
-        { error: "Business ID is required" },
-        { status: 400 }
+        { error: "Internal Server Error" },
+        { status: 500 }
       );
     }
-
-    await updateReviews(business_id);
-    const response = schema.response.parse({});
-    return NextResponse.json(response, { status: 200 });
-  } catch (error) {
-    console.error("Error processing request:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
-});
+  })
+);

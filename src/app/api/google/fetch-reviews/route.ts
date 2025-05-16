@@ -1,29 +1,26 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-import { withAuth } from "@/middleware/withAuth";
-import { fetchReviews } from "../fetch-reviews";
 import schema from "./schema";
+import { NextRouteContext, RequestHandler } from "@/middleware/types";
+import { withAuth } from "@/middleware/withAuth";
+import { withBody } from "@/middleware/withBody";
 
-export const POST = withAuth(async (req: NextRequest) => {
-  try {
-    const body = await req.json();
-    const { business_id } = schema.request.parse(body);
+import { fetchReviews } from "../fetch-reviews";
 
-    if (!business_id) {
+export const POST: RequestHandler<NextRouteContext> = withAuth(
+  withBody(schema, async (_, context) => {
+    try {
+      const { business_id } = context.body;
+
+      const businessReviews = await fetchReviews(business_id);
+      const response = schema.response.parse(businessReviews);
+      return NextResponse.json(response);
+    } catch (error) {
+      console.log(error);
       return NextResponse.json(
-        { error: "Business ID is required" },
+        { error: "Something went wrong" },
         { status: 400 }
       );
     }
-
-    const businessReviews = await fetchReviews(business_id);
-    const response = schema.response.parse(businessReviews);
-    return NextResponse.json(response);
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 400 }
-    );
-  }
-});
+  })
+);

@@ -1,8 +1,8 @@
 import "server-only";
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
-import schema from "./schema";
 
+import schema from "./schema";
 import { NextRouteContext, RequestHandler } from "@/middleware/types";
 import { withAuth } from "@/middleware/withAuth";
 
