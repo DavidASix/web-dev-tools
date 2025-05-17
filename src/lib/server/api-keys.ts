@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "@/schema/db";
-import { apiKeys } from "@/schema/crud";
+import { api_keys } from "@/schema/schema";
 import { encryptDeterministic } from "@/lib/encryption";
 
 export async function generateApiKey(user_id: string) {
@@ -10,7 +10,7 @@ export async function generateApiKey(user_id: string) {
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
   const encryptedKey = await encryptDeterministic(key);
-  await db.insert(apiKeys.table).values({ key: encryptedKey, user_id });
+  await db.insert(api_keys).values({ key: encryptedKey, user_id });
   return key;
 }
 
@@ -24,13 +24,8 @@ export async function apiKeyIsValid(key: string) {
   const encryptedKey = await encryptDeterministic(key);
   const apiKey = await db
     .select()
-    .from(apiKeys.table)
-    .where(
-      and(
-        eq(apiKeys.table.key, encryptedKey),
-        eq(apiKeys.table.expired, false),
-      ),
-    )
+    .from(api_keys)
+    .where(and(eq(api_keys.key, encryptedKey), eq(api_keys.expired, false)))
     .then((rows) => rows[0]);
   return apiKey?.user_id;
 }
@@ -38,9 +33,9 @@ export async function apiKeyIsValid(key: string) {
 export async function invalidateApiKey(key: string) {
   const encryptedKey = await encryptDeterministic(key);
   await db
-    .update(apiKeys.table)
+    .update(api_keys)
     .set({ expired: true })
-    .where(eq(apiKeys.table.key, encryptedKey));
+    .where(eq(api_keys.key, encryptedKey));
 }
 
 export async function checkApiKey(request: NextRequest): Promise<{

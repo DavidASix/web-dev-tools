@@ -1,8 +1,7 @@
-import { db } from "@/schema/db";
-import { businessStats } from "@/schema/crud";
 import { desc, eq } from "drizzle-orm";
+import { db } from "@/schema/db";
+import { reviews, business_stats } from "@/schema/schema";
 import { recordEvent } from "@/lib/server/events";
-import { reviews } from "@/schema/crud";
 
 /**
  * Fetch the latest business stats for a given business ID
@@ -15,12 +14,12 @@ export async function selectBusinessStats(business_id: number): Promise<{
 }> {
   const latestStats = await db
     .select({
-      review_count: businessStats.table.review_count,
-      review_score: businessStats.table.review_score,
+      review_count: business_stats.review_count,
+      review_score: business_stats.review_score,
     })
-    .from(businessStats.table)
-    .where(eq(businessStats.table.business_id, business_id))
-    .orderBy(desc(businessStats.table.created_at))
+    .from(business_stats)
+    .where(eq(business_stats.business_id, business_id))
+    .orderBy(desc(business_stats.created_at))
     .limit(1)
     .then((rows) => rows[0]);
 
@@ -45,16 +44,16 @@ export async function selectBusinessReviews(business_id: number): Promise<
 > {
   const businessReviews = await db
     .select({
-      author_name: reviews.table.author_name,
-      author_image: reviews.table.author_image,
-      datetime: reviews.table.datetime,
-      link: reviews.table.link,
-      rating: reviews.table.rating,
-      comments: reviews.table.comments,
+      author_name: reviews.author_name,
+      author_image: reviews.author_image,
+      datetime: reviews.datetime,
+      link: reviews.link,
+      rating: reviews.rating,
+      comments: reviews.comments,
     })
-    .from(reviews.table)
-    .where(eq(reviews.table.business_id, business_id))
-    .orderBy(desc(reviews.table.datetime))
+    .from(reviews)
+    .where(eq(reviews.business_id, business_id))
+    .orderBy(desc(reviews.datetime))
     .limit(30);
 
   await recordEvent("fetch_reviews", business_id);

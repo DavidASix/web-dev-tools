@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/schema/db";
-import { businesses } from "@/schema/crud";
+import { businesses } from "@/schema/schema";
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     // Insert a new business with minimal data
     const [newBusiness] = await db
-      .insert(businesses.table)
+      .insert(businesses)
       .values({
         business_name: body.business_name || "Test Business",
         place_id: body.place_id || null,

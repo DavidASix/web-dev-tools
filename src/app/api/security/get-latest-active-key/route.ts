@@ -5,7 +5,7 @@ import schema from "./schema";
 import { withAuth } from "@/middleware/withAuth";
 import { NextRouteContext, RequestHandler } from "@/middleware/types";
 
-import { apiKeys } from "@/schema/crud";
+import { api_keys } from "@/schema/schema";
 import { db } from "@/schema/db";
 import { decrypt } from "@/lib/encryption";
 
@@ -15,14 +15,9 @@ export const GET: RequestHandler<NextRouteContext> = withAuth(
     try {
       const apiKey = await db
         .select()
-        .from(apiKeys.table)
-        .where(
-          and(
-            eq(apiKeys.table.user_id, user_id),
-            eq(apiKeys.table.expired, false),
-          ),
-        )
-        .orderBy(desc(apiKeys.table.created_at))
+        .from(api_keys)
+        .where(and(eq(api_keys.user_id, user_id), eq(api_keys.expired, false)))
+        .orderBy(desc(api_keys.created_at))
         .then((rows) => rows[0]);
       const decryptedKey = await decrypt(apiKey?.key || "");
       const response = schema.response.parse({

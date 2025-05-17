@@ -1,9 +1,8 @@
-import { reviews, businesses, businessStats } from "@/schema/crud";
+import { reviews, businesses, business_stats } from "@/schema/schema";
 import { db } from "@/schema/db";
 import { eq, inArray } from "drizzle-orm";
 import { recordEvent } from "@/lib/server/events";
 import GoogleReviews from "@/google-reviews";
-import { z } from "zod";
 
 /**
  * Add the current business stats to the database for the given business ID, then return the inserted stats.
@@ -18,8 +17,8 @@ export async function updateBusinessStats(business_id: number): Promise<{
 }> {
   const business = await db
     .select()
-    .from(businesses.table)
-    .where(eq(businesses.table.id, business_id))
+    .from(businesses)
+    .where(eq(businesses.id, business_id))
     .then((rows) => rows[0]);
 
   if (!business) throw new Error("Business not found");
@@ -33,16 +32,16 @@ export async function updateBusinessStats(business_id: number): Promise<{
 
   // Store the updated stats
   const insertedStats = await db
-    .insert(businessStats.table)
+    .insert(business_stats)
     .values({
       business_id: business_id,
       review_count: newStats.review_count,
       review_score: newStats.rating,
     })
     .returning({
-      business_id: businessStats.table.business_id,
-      review_count: businessStats.table.review_count,
-      review_score: businessStats.table.review_score,
+      business_id: business_stats.business_id,
+      review_count: business_stats.review_count,
+      review_score: business_stats.review_score,
     })
     .then((rows) => rows[0]);
 
@@ -53,8 +52,8 @@ export async function updateBusinessStats(business_id: number): Promise<{
 export async function updateBusinessReviews(business_id: number) {
   const business = await db
     .select()
-    .from(businesses.table)
-    .where(eq(businesses.table.id, business_id))
+    .from(businesses)
+    .where(eq(businesses.id, business_id))
     .then((rows) => rows[0]);
 
   if (!business) throw new Error("Business not found");
@@ -69,28 +68,26 @@ export async function updateBusinessReviews(business_id: number) {
   // Get the existing reviews for the business which appear in the recentReviews array
   const existingReviews = await db
     .select()
-    .from(reviews.table)
+    .from(reviews)
     .where(
       inArray(
-        reviews.table.lookup_id,
+        reviews.lookup_id,
         recentReviews.map((r) => r.review_id),
       ),
     );
 
   // Format table and remove any existing reviews from the insertable rows1
-  const insertableReviews: z.infer<typeof reviews.insert>[] = recentReviews
-    .map(
-      (review): z.infer<typeof reviews.insert> => ({
-        business_id: business_id,
-        lookup_id: review.review_id,
-        author_name: review.author_name,
-        author_image: review.author_photo_url,
-        datetime: new Date(review.review_datetime_utc),
-        link: review.review_link,
-        rating: review.rating,
-        comments: review.review_text,
-      }),
-    )
+  const insertableReviews = recentReviews
+    .map((review) => ({
+      business_id: business_id,
+      lookup_id: review.review_id,
+      author_name: review.author_name,
+      author_image: review.author_photo_url,
+      datetime: new Date(review.review_datetime_utc),
+      link: review.review_link,
+      rating: review.rating,
+      comments: review.review_text,
+    }))
     .filter(
       (review) =>
         !existingReviews.some((r) => r.lookup_id === review.lookup_id),
@@ -98,7 +95,7 @@ export async function updateBusinessReviews(business_id: number) {
 
   console.log(`Inserting ${insertableReviews.length} new reviews`);
   if (insertableReviews.length > 0) {
-    await db.insert(reviews.table).values(insertableReviews);
+    await db.insert(reviews).values(insertableReviews);
   }
 
   await recordEvent("update_reviews", business_id);
