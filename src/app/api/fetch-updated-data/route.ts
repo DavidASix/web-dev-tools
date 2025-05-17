@@ -7,10 +7,14 @@ import { withApiKey } from "@/middleware/withApiKey";
 
 import { getLastEvent } from "@/lib/server/events";
 
-import { updateReviews } from "../google/update-reviews";
-import { updateBusinessStats } from "../google/update-business-stats";
-import { fetchReviews } from "../google/fetch-reviews";
-import { fetchBusinessStats } from "../google/fetch-business-stats";
+import {
+  updateBusinessStats,
+  updateBusinessReviews,
+} from "@/lib/server/google/update";
+import {
+  selectBusinessStats,
+  selectBusinessReviews,
+} from "@/lib/server/google/select";
 
 /**
  * Checks if reviews/stats need updating, updates if needed, then returns latest data. This endpoint is called by 11ty in the clients
@@ -39,7 +43,7 @@ export const POST: RequestHandler<NextRouteContext> = withApiKey(
         !lastUpdateReviews?.timestamp ||
         lastUpdateReviews.timestamp < oneDayAgo
       ) {
-        await updateReviews(business_id);
+        await updateBusinessReviews(business_id);
       }
 
       if (
@@ -51,8 +55,8 @@ export const POST: RequestHandler<NextRouteContext> = withApiKey(
 
       // Get the data
       const [reviews, stats] = await Promise.all([
-        fetchReviews(business_id),
-        fetchBusinessStats(business_id),
+        selectBusinessReviews(business_id),
+        selectBusinessStats(business_id),
       ]);
 
       const response = schema.response.parse({

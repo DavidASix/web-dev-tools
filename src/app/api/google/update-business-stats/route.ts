@@ -5,7 +5,7 @@ import { NextRouteContext, RequestHandler } from "@/middleware/types";
 import { withAuth } from "@/middleware/withAuth";
 import { withBody } from "@/middleware/withBody";
 
-import { updateBusinessStats } from "../update-business-stats";
+import { updateBusinessStats } from "@/lib/server/google/update";
 
 export const POST: RequestHandler<NextRouteContext> = withAuth(
   withBody(schema, async (_, context) => {

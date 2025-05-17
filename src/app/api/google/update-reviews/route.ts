@@ -5,14 +5,14 @@ import { NextRouteContext, RequestHandler } from "@/middleware/types";
 import { withAuth } from "@/middleware/withAuth";
 import { withBody } from "@/middleware/withBody";
 
-import { updateReviews } from "../update-reviews";
+import { updateBusinessReviews } from "@/lib/server/google/update";
 
 export const POST: RequestHandler<NextRouteContext> = withAuth(
   withBody(schema, async (_, context) => {
     try {
       const { business_id } = context.body;
 
-      await updateReviews(business_id);
+      await updateBusinessReviews(business_id);
       const response = schema.response.parse({});
       return NextResponse.json(response, { status: 200 });
     } catch (error) {
