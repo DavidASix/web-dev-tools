@@ -18,6 +18,15 @@ export type OwnedTable = PgTable & {
   user_id: PgColumn<TextColumn>;
 };
 
+/**
+ * This function checks if a user owns a specific item in a given table. It should be called before any
+ * CRUD operation to ensure that the user has the necessary permissions to modify or access the item.
+ *
+ * @param userId - The ID of the user to check ownership for, which is a TEXT UUID
+ * @param itemId - The ID of the item to check ownership for, which is a serial number
+ * @param table  - The PG Table to check ownership against
+ * @returns - Boolean indicating whether the user owns the item
+ */
 export async function userHasOwnership(
   userId: string,
   itemId: number,
