@@ -99,6 +99,9 @@ export const authenticators = pgTable(
 
 export const businesses = pgTable("businesses", {
   id: serial("id").primaryKey(),
+  user_id: text("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   business_name: text("business_name"),
   place_id: varchar("place_id", { length: 256 }),
 });
@@ -140,6 +143,9 @@ export type DBEvent = (typeof dbEvents.enumValues)[number];
 export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   event: dbEvents("event"),
+  user_id: text("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   business_id: integer("business_id")
     .references(() => businesses.id, { onDelete: "cascade" })
     .notNull(),
