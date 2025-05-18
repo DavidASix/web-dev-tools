@@ -6,6 +6,7 @@ import { withAuth } from "@/middleware/withAuth";
 import { withBody } from "@/middleware/withBody";
 
 import { selectBusinessStats } from "@/lib/server/google/select";
+import { recordEvent } from "@/lib/server/events";
 
 export const POST: RequestHandler<NextRouteContext> = withAuth(
   withBody(schema, async (_, context) => {
@@ -14,6 +15,9 @@ export const POST: RequestHandler<NextRouteContext> = withAuth(
 
       const latestStats = await selectBusinessStats(business_id);
       const response = schema.response.parse(latestStats);
+      await recordEvent("fetch_stats", context.user_id, {
+        business_id: business_id,
+      });
       return NextResponse.json(response);
     } catch (error) {
       console.log(error);

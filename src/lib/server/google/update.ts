@@ -1,7 +1,6 @@
 import { reviews, businesses, business_stats } from "@/schema/schema";
 import { db } from "@/schema/db";
 import { eq, inArray } from "drizzle-orm";
-import { recordEvent } from "@/lib/server/events";
 import GoogleReviews from "@/google-reviews";
 
 /**
@@ -45,7 +44,6 @@ export async function updateBusinessStats(business_id: number): Promise<{
     })
     .then((rows) => rows[0]);
 
-  await recordEvent("update_stats", business_id);
   return insertedStats;
 }
 
@@ -97,6 +95,4 @@ export async function updateBusinessReviews(business_id: number) {
   if (insertableReviews.length > 0) {
     await db.insert(reviews).values(insertableReviews);
   }
-
-  await recordEvent("update_reviews", business_id);
 }

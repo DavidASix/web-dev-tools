@@ -6,6 +6,7 @@ import { withAuth } from "@/middleware/withAuth";
 import { withBody } from "@/middleware/withBody";
 
 import { updateBusinessReviews } from "@/lib/server/google/update";
+import { recordEvent } from "@/lib/server/events";
 
 export const POST: RequestHandler<NextRouteContext> = withAuth(
   withBody(schema, async (_, context) => {
@@ -14,6 +15,9 @@ export const POST: RequestHandler<NextRouteContext> = withAuth(
 
       await updateBusinessReviews(business_id);
       const response = schema.response.parse({});
+      await recordEvent("update_reviews", context.user_id, {
+        business_id: business_id,
+      });
       return NextResponse.json(response, { status: 200 });
     } catch (error) {
       console.error("Error processing request:", error);

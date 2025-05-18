@@ -34,9 +34,12 @@ export const POST: RequestHandler<NextRouteContext> = withApiKey(
       // Check last update times
       const lastUpdateReviews = await getLastEvent(
         "update_reviews",
-        business_id,
+        context.user_id,
       );
-      const lastUpdateStats = await getLastEvent("update_stats", business_id);
+      const lastUpdateStats = await getLastEvent(
+        "update_stats",
+        context.user_id,
+      );
 
       // If data is out of date, fetch and update
       if (

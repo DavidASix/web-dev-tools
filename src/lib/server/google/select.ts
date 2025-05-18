@@ -1,7 +1,6 @@
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/schema/db";
 import { reviews, business_stats } from "@/schema/schema";
-import { recordEvent } from "@/lib/server/events";
 
 /**
  * Fetch the latest business stats for a given business ID
@@ -23,7 +22,6 @@ export async function selectBusinessStats(business_id: number): Promise<{
     .limit(1)
     .then((rows) => rows[0]);
 
-  await recordEvent("fetch_stats", business_id);
   return latestStats;
 }
 
@@ -56,6 +54,5 @@ export async function selectBusinessReviews(business_id: number): Promise<
     .orderBy(desc(reviews.datetime))
     .limit(30);
 
-  await recordEvent("fetch_reviews", business_id);
   return businessReviews;
 }
