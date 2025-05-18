@@ -15,6 +15,8 @@ import {
   selectBusinessStats,
   selectBusinessReviews,
 } from "@/lib/server/google/select";
+import { userHasOwnership } from "@/lib/ownership";
+import { businesses } from "@/schema/schema";
 
 /**
  * Checks if reviews/stats need updating, updates if needed, then returns latest data. This endpoint is called by 11ty in the clients
@@ -28,6 +30,7 @@ export const POST: RequestHandler<NextRouteContext> = withApiKey(
     try {
       const { business_id } = context.body;
 
+      await userHasOwnership(context.user_id, business_id, businesses);
       const oneDayAgo = new Date();
       oneDayAgo.setDate(oneDayAgo.getDate() - 1);
 

@@ -7,11 +7,14 @@ import { withBody } from "@/middleware/withBody";
 
 import { selectBusinessStats } from "@/lib/server/google/select";
 import { recordEvent } from "@/lib/server/events";
+import { userHasOwnership } from "@/lib/ownership";
+import { businesses } from "@/schema/schema";
 
 export const POST: RequestHandler<NextRouteContext> = withAuth(
   withBody(schema, async (_, context) => {
     try {
       const { business_id } = context.body;
+      await userHasOwnership(context.user_id, business_id, businesses);
 
       const latestStats = await selectBusinessStats(business_id);
       const response = schema.response.parse(latestStats);
