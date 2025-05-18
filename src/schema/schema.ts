@@ -9,7 +9,9 @@ import {
   timestamp,
   real,
   pgEnum,
+  jsonb,
 } from "drizzle-orm/pg-core";
+import { z } from "zod";
 import type { AdapterAccountType } from "next-auth/adapters";
 
 /**
@@ -140,15 +142,19 @@ export const dbEvents = pgEnum("event_types", [
 
 export type DBEvent = (typeof dbEvents.enumValues)[number];
 
+export const eventMetadataSchema = z.object({
+  business_id: z.number().optional(),
+});
+
+export type EventMetadata = z.infer<typeof eventMetadataSchema>;
+
 export const events = pgTable("events", {
   id: serial("id").primaryKey(),
   event: dbEvents("event"),
   user_id: text("user_id")
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
-  business_id: integer("business_id")
-    .references(() => businesses.id, { onDelete: "cascade" })
-    .notNull(),
+  metadata: jsonb("metadata").$type<EventMetadata>(),
   timestamp: timestamp("timestamp", { withTimezone: true }).defaultNow(),
 });
 

@@ -43,6 +43,13 @@
       "when": 1747582616081,
       "tag": "0005_cynical_molly_hayes",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1747583128074,
+      "tag": "0006_noisy_wrecker",
+      "breakpoints": true
     }
   ]
 }
