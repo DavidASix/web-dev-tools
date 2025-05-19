@@ -12,6 +12,12 @@ import { products } from "@/lib/products";
 
 const { DOMAIN } = process.env;
 
+/**
+ * This endpoint initializes a Stripe Checkout session and returns the session details to the client
+ * the client then uses the stripe.js library to redirect the user to the Stripe Checkout page
+ * After the user completes the payment, a webhook event is sent to the server and the user is
+ * redirected to the success or failure page based on the payment status.
+ */
 export const POST: RequestHandler<NextRouteContext> = withAuth(
   withBody(schema, async (_, context) => {
     try {
