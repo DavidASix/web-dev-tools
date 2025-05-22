@@ -158,6 +158,21 @@ export const events = pgTable("events", {
   timestamp: timestamp("timestamp", { withTimezone: true }).defaultNow(),
 });
 
+export const payments = pgTable("payments", {
+  id: serial("id").primaryKey(),
+  user_id: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  stripe_customer_id: text("stripe_customer_id"),
+  stripe_payment_intent_id: text("stripe_payment_intent_id"), // Nullable by default
+  stripe_checkout_session_id: text("stripe_checkout_session_id").unique(),
+  status: text("status"),
+  amount_total: integer("amount_total"),
+  currency: text("currency"),
+  payment_status: text("payment_status"),
+  line_items: jsonb("line_items"),
+  metadata: jsonb("metadata"), // Nullable by default
+  created_at: timestamp("created_at", { withTimezone: true }).defaultNow(),
+});
+
 /**
  * API KEYS
  */
